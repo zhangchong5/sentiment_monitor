@@ -1,0 +1,2 @@
+# sentiment_monitor
+搜索企业客户公开Google互联网信息，以便于查询企业是否有反洗钱相关的负面影响
