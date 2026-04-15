@@ -10,3 +10,6 @@
 
 __version__ = "2.0.0"
 __author__ = "Sentiment Monitor Team"
+
+# 显式导入子模块，确保 mock 路径正确
+from app import core, models, services, utils
