@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>香港分行舆情监测报告</title>
+    <style>
+        /* ============================================
+           全局样式
+           ============================================ */
+        @font-face {
+            font-family: 'Noto Sans SC';
+            src: url('noto-sans-sc/NotoSansSC-Regular.ttf') format('truetype');
+            font-weight: 400;
+            font-display: swap;
+        }
+        @font-face {
+            font-family: 'Noto Sans SC';
+            src: url('noto-sans-sc/NotoSansSC-Bold.ttf') format('truetype');
+            font-weight: 700;
+            font-display: swap;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Noto Sans SC', 'Microsoft YaHei', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #fff;
+        }
+        
+        /* ============================================
+           布局容器
+           ============================================ */
+        .container {
+            width: 210mm; /* A4宽度 */
+            margin: 0 auto;
+            padding: 20mm;
+            background-color: #fff;
+        }
+        
+        /* ============================================
+           页眉样式
+           ============================================ */
+        .header {
+            text-align: center;
+            border-bottom: 3px solid #1a5276;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .header h1 {
+            color: #1a5276;
+            font-size: 26px;
+            font-weight: 700;
+            margin: 15px 0 10px;
+            letter-spacing: 1px;
+        }
+        
+        .header .subtitle {
+            color: #566573;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+        
+        .header .logo {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+        
+        /* ============================================
+           元数据区块
+           ============================================ */
+        .metadata {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 25px 0;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .metadata-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 10px;
+        }
+        
+        .metadata-item {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .metadata-label {
+            font-size: 11px;
+            opacity: 0.9;
+            margin-bottom: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .metadata-value {
+            font-size: 16px;
+            font-weight: 700;
+            word-break: break-word;
+        }
+        
+        .ai-badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            margin-top: 8px;
+        }
+        
+        .ai-badge.enabled {
+            background-color: rgba(255,255,255,0.2);
+            color: #a8e6cf;
+        }
+        
+        .ai-badge.disabled {
+            background-color: rgba(255,255,255,0.2);
+            color: #ffaaa5;
+        }
+        
+        /* ============================================
+           章节样式
+           ============================================ */
+        .section {
+            margin: 40px 0;
+        }
+        
+        .section-title {
+            display: flex;
+            align-items: center;
+            color: #1a5276;
+            font-size: 20px;
+            font-weight: 700;
+            border-left: 5px solid #1a5276;
+            padding-left: 15px;
+            margin: 30px 0 20px;
+            gap: 12px;
+        }
+        
+        .section-title .icon {
+            font-size: 24px;
+        }
+        
+        .section-subtitle {
+            color: #566573;
+            font-size: 13px;
+            margin-top: 5px;
+            padding-left: 28px;
+            font-style: italic;
+        }
+        
+        /* ============================================
+           摘要框样式
+           ============================================ */
+        .summary-box {
+            background-color: #e8f4fc;
+            border-left: 5px solid #3498db;
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 0 6px 6px 0;
+            line-height: 1.7;
+            font-size: 13px;
+        }
+        
+        .summary-box.warning {
+            background-color: #fff8e1;
+            border-left-color: #ffc107;
+        }
+        
+        .summary-box.ai-disabled {
+            background-color: #f8f9fa;
+            border-left-color: #6c757d;
+            border-style: dashed;
+        }
+        
+        /* ============================================
+           表格样式
+           ============================================ */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 11px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        
+        th {
+            background-color: #1a5276;
+            color: white;
+            font-weight: 600;
+            text-align: left;
+            padding: 12px 10px;
+            border: 1px solid #154360;
+        }
+        
+        td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            vertical-align: top;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        
+        tr:hover {
+            background-color: #e3f2fd;
+        }
+        
+        .url-link {
+            color: #3498db;
+            text-decoration: none;
+            word-break: break-all;
+            font-size: 10px;
+        }
+        
+        .url-link:hover {
+            text-decoration: underline;
+        }
+        
+        /* ============================================
+           情感倾向标签
+           ============================================ */
+        .sentiment-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 11px;
+            font-weight: 600;
+            text-align: center;
+            min-width: 60px;
+        }
+        
+        .sentiment-positive {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        
+        .sentiment-neutral {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+        
+        .sentiment-negative {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        
+        /* ============================================
+           文章区块样式
+           ============================================ */
+        .article {
+            margin: 35px 0;
+            padding: 20px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            background-color: #fff;
+            page-break-inside: avoid;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        
+        .article-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            border-bottom: 2px solid #1a5276;
+            padding-bottom: 12px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .article-number {
+            font-weight: 700;
+            color: #1a5276;
+            font-size: 16px;
+            min-width: 30px;
+        }
+        
+        .article-title {
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 15px;
+            line-height: 1.4;
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        .article-url {
+            color: #3498db;
+            text-decoration: none;
+            word-break: break-all;
+            font-size: 10px;
+            line-height: 1.5;
+            margin: 8px 0;
+            display: block;
+        }
+        
+        .article-url:hover {
+            text-decoration: underline;
+        }
+        
+        .article-snippet {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+            font-style: italic;
+            font-size: 11px;
+            line-height: 1.6;
+            border-left: 3px solid #ddd;
+        }
+        
+        .article-snippet strong {
+            color: #566573;
+            font-weight: 600;
+        }
+        
+        /* ============================================
+           截图样式
+           ============================================ */
+        .screenshot-container {
+            text-align: center;
+            margin: 25px 0;
+            page-break-inside: avoid;
+        }
+        
+        .screenshot-img {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            display: block;
+            margin: 0 auto;
+        }
+        
+        .screenshot-caption {
+            font-size: 9px;
+            color: #7f8c8d;
+            margin-top: 8px;
+            font-style: italic;
+        }
+        
+        /* ============================================
+           页脚样式
+           ============================================ */
+        .footer {
+            margin-top: 60px;
+            padding-top: 25px;
+            border-top: 2px solid #1a5276;
+            text-align: center;
+            color: #7f8c8d;
+            font-size: 10px;
+            line-height: 1.6;
+        }
+        
+        .footer p {
+            margin: 5px 0;
+        }
+        
+        .disclaimer {
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 12px;
+            margin-top: 15px;
+            border-radius: 0 4px 4px 0;
+            font-size: 9px;
+            color: #856404;
+            font-weight: 500;
+        }
+        
+        .disclaimer strong {
+            color: #e74c3c;
+        }
+        
+        /* ============================================
+           打印样式
+           ============================================ */
+        @media print {
+            .container {
+                padding: 15mm;
+                width: 210mm;
+            }
+            
+            body {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+        }
+        
+        /* ============================================
+           分页控制
+           ============================================ */
+        .page-break {
+            page-break-before: always;
+        }
+        
+        /* 避免孤行 */
+        h3, .article {
+            page-break-inside: avoid;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- ============================================
+             页眉
+             ============================================ -->
+        <div class="header">
+            <div class="logo">🏦</div>
+            <h1>香港分行舆情监测报告</h1>
+            <div class="subtitle">合规风险专项筛查 | {{ metadata.generation_time }}</div>
+        </div>
+        
+        <!-- ============================================
+             元数据区块
+             ============================================ -->
+        <div class="metadata">
+            <div class="metadata-grid">
+                <div class="metadata-item">
+                    <span class="metadata-label">搜索关键词</span>
+                    <span class="metadata-value">{{ metadata.keyword }}</span>
+                </div>
+                <div class="metadata-item">
+                    <span class="metadata-label">检索结果数</span>
+                    <span class="metadata-value">{{ metadata.total_results }} 条</span>
+                </div>
+                <div class="metadata-item">
+                    <span class="metadata-label">有效分析数</span>
+                    <span class="metadata-value">{{ metadata.valid_articles }} 篇</span>
+                </div>
+                <div class="metadata-item">
+                    <span class="metadata-label">生成时间</span>
+                    <span class="metadata-value">{{ metadata.generation_time }}</span>
+                </div>
+            </div>
+            <div class="ai-badge {{ 'enabled' if metadata.ai_enabled else 'disabled' }}">
+                {% if metadata.ai_enabled %}
+                ✅ AI智能分析已启用
+                {% else %}
+                ⚠️ AI分析已禁用（使用占位符）
+                {% endif %}
+            </div>
+        </div>
+        
+        <!-- ============================================
+             第一部分：舆情概览
+             ============================================ -->
+        <div class="section">
+            <div class="section-title">
+                <span class="icon">📊</span>
+                <span>一、舆情概览与风险摘要</span>
+            </div>
+            <div class="section-subtitle">
+                基于Google搜索结果的综合风险评估（前{{ section_one_items|length }}条）
+            </div>
+            
+            <!-- AI总结框 -->
+            <div class="summary-box {% if not metadata.ai_enabled %}ai-disabled warning{% endif %}">
+                {{ section_one_summary | safe | replace('\n', '<br>') }}
+            </div>
+            
+            <!-- 概览表格 -->
+            <table>
+                <thead>
+                    <tr>
+                        <th width="8%">序号</th>
+                        <th width="25%">标题</th>
+                        <th width="35%">AI风险摘要</th>
+                        <th width="12%">情感倾向</th>
+                        <th width="20%">URL</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in section_one_items %}
+                    <tr>
+                        <td><strong>{{ loop.index }}</strong></td>
+                        <td>
+                            <div style="max-width: 200px; word-wrap: break-word;">
+                                {{ item.url_title }}
+                            </div>
+                        </td>
+                        <td>
+                            <div style="max-height: 80px; overflow: hidden; line-height: 1.5;">
+                                {{ item.ai_summary | safe | replace('\n', '<br>') }}
+                            </div>
+                        </td>
+                        <td>
+                            <span class="sentiment-badge sentiment-{{ item.sentiment.lower() }}">
+                                {% if item.sentiment == "正面" %}✓ 正面
+                                {% elif item.sentiment == "负面" %}✗ 负面
+                                {% else %}○ 中性{% endif %}
+                            </span>
+                        </td>
+                        <td>
+                            <a href="{{ item.url }}" class="url-link">{{ item.url | truncate(40) }}</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- 分页符 -->
+        <div class="page-break"></div>
+        
+        <!-- ============================================
+             第二部分：详细内容分析
+             ============================================ -->
+        <div class="section">
+            <div class="section-title">
+                <span class="icon">📰</span>
+                <span>二、详细内容分析</span>
+            </div>
+            <div class="section-subtitle">
+                每个网页的深度分析与截图（共{{ section_two_items|length }}篇有效内容）
+            </div>
+            
+            {% for item in section_two_items %}
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-number">{{ loop.index }}.</div>
+                    <div class="article-title">{{ item.title }}</div>
+                    <span class="sentiment-badge sentiment-{{ item.sentiment.lower() }}">
+                        {% if item.sentiment == "正面" %}✓ 正面
+                        {% elif item.sentiment == "负面" %}✗ 负面
+                        {% else %}○ 中性{% endif %}
+                    </span>
+                </div>
+                
+                <a href="{{ item.url }}" class="article-url">{{ item.url }}</a>
+                
+                <div class="article-snippet">
+                    <strong>Google摘要：</strong>{{ item.google_snippet }}
+                </div>
+                
+                <div class="summary-box {% if not metadata.ai_enabled %}ai-disabled{% endif %}">
+                    <strong>AI内容总结：</strong>
+                    {{ item.content_summary | safe | replace('\n', '<br>') }}
+                </div>
+                
+                {% if item.screenshot_path %}
+                <div class="screenshot-container">
+                    <img src="{{ item.screenshot_path }}" class="screenshot-img" alt="网页截图">
+                    <div class="screenshot-caption">
+                        * 截图生成于 {{ metadata.generation_time }}，页面内容可能已变更
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+            
+            <!-- 每5篇文章分页，避免单页过长 -->
+            {% if loop.index % 5 == 0 and not loop.last %}
+            <div class="page-break"></div>
+            {% endif %}
+            {% endfor %}
+        </div>
+        
+        <!-- ============================================
+             页脚
+             ============================================ -->
+        <div class="footer">
+            <p>© {{ metadata.generation_time[:4] }} 香港分行合规部 | 舆情监测系统 v1.0</p>
+            <p>报告生成时间：{{ metadata.generation_time }} | 共 {{ section_two_items|length }} 篇有效分析</p>
+            
+            <div class="disclaimer">
+                <strong>⚠️ 免责声明：</strong>
+                本报告由AI辅助生成（{% if metadata.ai_enabled %}已启用{% else %}未启用{% endif %}），
+                仅供参考，不构成法律或合规建议。关键风险点需人工复核确认。
+            </div>
+        </div>
+    </div>
+</body>
+</html>
