@@ -9,22 +9,13 @@ python-dotenv>=1.0.0
 jinja2>=3.1.0
 
 # ============================================
-# PDF生成（WeasyPrint）
+# PDF 生成（Playwright）
 # ============================================
-weasyprint>=60.0
-cairocffi>=1.6.0
-# 系统依赖（需手动安装）：
-# Ubuntu/Debian: sudo apt-get install libpango-1.0-0 libpangocairo-1.0-0 libgdk-pixbuf2.0-0 libcairo2 libffi-dev libjpeg-dev zlib1g-dev
-# macOS: brew install pango gdk-pixbuf cairo libffi jpeg zlib
-# Windows: 无需额外安装（WeasyPrint已包含二进制依赖）
-
-# ============================================
-# 网页截图（Playwright）
-# ============================================
+# Playwright 同时用于截图和 PDF 生成，无需 WeasyPrint
 playwright>=1.40.0
 # 首次运行需安装浏览器：playwright install chromium
 
 # ============================================
 # 其他工具
 # ============================================
-loguru>=0.7.0  # 可选：增强日志（当前使用标准logging）
+loguru>=0.7.0  # 可选：增强日志（当前使用标准 logging）
