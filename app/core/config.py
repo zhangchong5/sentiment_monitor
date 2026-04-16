@@ -3,9 +3,11 @@
 支持环境变量与默认值双重机制，确保安全性与灵活性
 """
 import os
-import logging
 from pathlib import Path
 from dotenv import load_dotenv
+
+# 导入新的日志系统
+from app.utils.logger import setup_logging, get_logger
 
 # ============================================
 # 环境变量加载
@@ -13,14 +15,16 @@ from dotenv import load_dotenv
 load_dotenv()  # 从.env 文件加载环境变量
 
 # ============================================
-# 日志配置（在类外初始化）
+# 日志配置（使用新的日志系统）
 # ============================================
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s | %(levelname)-8s | %(name)-15s | %(message)s',
-    datefmt='%Y-%m-%d %H:%M:%S'
+# 初始化日志系统（在类外执行一次）
+setup_logging(
+    level=os.getenv("LOG_LEVEL", "INFO"),
+    log_to_file=os.getenv("LOG_TO_FILE", "False").lower() in ("true", "1", "yes", "y"),
+    log_dir=Path(os.getenv("LOG_DIR", "/workspace/logs"))
 )
-logger = logging.getLogger(__name__)
+
+logger = get_logger(__name__)
 
 
 class Config:

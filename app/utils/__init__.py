@@ -3,5 +3,27 @@
 """
 
 from app.utils.helpers import truncate_text
+from app.utils.logger import (
+    setup_logging,
+    get_logger,
+    set_log_level,
+    LogConfig,
+    debug,
+    info,
+    warning,
+    error,
+    critical
+)
 
-__all__ = ["truncate_text"]
+__all__ = [
+    "truncate_text",
+    "setup_logging",
+    "get_logger",
+    "set_log_level",
+    "LogConfig",
+    "debug",
+    "info",
+    "warning",
+    "error",
+    "critical"
+]
